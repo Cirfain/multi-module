@@ -1,13 +1,20 @@
 pipeline {
    agent any 
+    
 
     stages {
         stage('Build and tests') {
+            
             steps {
                 echo 'Unit test et packaging'
-                mvn -Dmaven.test.failure.ignore=true clean package
+                tool name : "Maven 3"
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
-            
+            post {
+                always {
+                    junit 'pom.xml'
+                        }
+            } 
              
         }
         stage('Analyse qualité et vulnérabilités') {
