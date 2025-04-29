@@ -8,6 +8,10 @@ pipeline {
     environment {
         SONAR_TOKEN = credentials('ad53038b-7bd5-41ef-9056-d84df2962bdb')
     }
+    options {
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')
+        timeout(time: 2, unit: 'HOURS')
+    }
 
     stages 
     {
@@ -66,6 +70,9 @@ pipeline {
             beforeOptions true
             beforeInput true
             beforeAgent true
+            }
+            options {
+                timeout(2)
             }
             input {
               message 'Dans quel datacenter voulez-vous deployer votre truc ?'
