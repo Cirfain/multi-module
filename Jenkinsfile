@@ -6,7 +6,7 @@ pipeline {
         jdk 'Java21'
     }
     environment {
-        SONAR_TOKEN = credentials('Token Sonaqube')
+        SONAR_TOKEN = credentials('ad53038b-7bd5-41ef-9056-d84df2962bdb')
     }
     stages 
     {
@@ -37,12 +37,6 @@ pipeline {
 
         stage('Analyse qualité et vulnérabilités')
         {
-
-// mvn -DskipTests verify
-
-// Une tâche exécutant une analyse SonarQube
-// mvn -Dsonar.token=${SONAR_TOKEN} clean integration-test sonar:sonar
-
             parallel
             {
                 stage('Vulnérabilités') {
