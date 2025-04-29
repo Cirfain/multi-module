@@ -17,6 +17,7 @@ pipeline {
     {
         stage('Build and tests')
         {
+            agent any
             steps  {
                 echo 'Unit test et packaging'
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
