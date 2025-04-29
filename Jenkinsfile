@@ -67,10 +67,14 @@ pipeline {
                     choice choices: ['Paris', 'Lille', 'Lyon'], name: 'VILLES'
                 }
             }
+            environment{ 
+                VILLE_CHOISI = $(VILLES)
+            } 
             steps {
+                echo $(VILLES)
                 echo "Déploiement intégration"
                 unstash 'file'
-                sh 'cp application/**/*.jar $(VILLES)'
+                sh 'cp application/**/*.jar $(VILLE_CHOISI)'
             }
         }
 
