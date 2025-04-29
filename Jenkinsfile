@@ -1,13 +1,17 @@
 pipeline {
    agent any 
-    
+    tools {
+      maven 'Maven 3'
+        jdk 'Java21'
+        }
+
+
 
     stages {
         stage('Build and tests') {
             
             steps {
                 echo 'Unit test et packaging'
-                tool name : "Maven 3"
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
             post {
