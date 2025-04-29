@@ -79,7 +79,7 @@ pipeline {
                 script 
                 {
                     def json = readJSON(file: '/home/plb/mywork/multi-module/deployment.json', text: '');
-                    def lstDC = json[dataCenters];
+                    def lstDC = json["dataCenters"];
                     if (Deploi)
                     { 
                         node{  
@@ -87,7 +87,7 @@ pipeline {
                             unstash('file');
                             for (def dc in lstDC)
                             {
-                                sh 'cp application/**/*.jar /home/plb/mywork/environments/${dc}.jar'
+                                sh "cp application/**/*.jar /home/plb/mywork/environments/${dc}.jar"
                             }  
                         } 
                     } 
