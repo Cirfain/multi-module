@@ -112,7 +112,7 @@ def checkSonarQualityGate(){
     // Get task informations to get the status
     timeout(time: 4, unit: 'MINUTES') {
         waitUntil(initialRecurrencePeriod: 1000)  {
-            withCredentials ([string(credentialsId: 'SONAR_TOKEN', variable : 'token')]) {
+            withCredentials ([string(credentialsId: 'ad53038b-7bd5-41ef-9056-d84df2962bdb', variable : 'token')]) {
                 def response = sh(script: "curl -u ${token}: ${ceTaskUrl}", returnStdout: true).trim()
                 ceTask = readJSON text: response
             }
@@ -126,7 +126,7 @@ def checkSonarQualityGate(){
     def ceTaskAnalysisId = ceTask['task']['analysisId']
     def qualitygate
 
-    withCredentials ([string(credentialsId: 'SONAR_TOKEN', variable : 'token')]) {
+    withCredentials ([string(credentialsId: 'ad53038b-7bd5-41ef-9056-d84df2962bdb', variable : 'token')]) {
         def response = sh(script: "curl -u ${token}: ${sonarServerUrl}/api/qualitygates/project_status?analysisId=${ceTaskAnalysisId}", returnStdout: true).trim()
         qualitygate =  readJSON text: response
     }
