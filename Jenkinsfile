@@ -1,12 +1,13 @@
 pipeline {
    agent any 
 
-
     stages {
-        stage('Compile et tests') {
+        stage('Build and tests') {
             steps {
                 echo 'Unit test et packaging'
+                mvn -Dmaven.test.failure.ignore=true clean package
             }
+            
              
         }
         stage('Analyse qualité et vulnérabilités') {
