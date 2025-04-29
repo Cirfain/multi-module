@@ -5,7 +5,9 @@ pipeline {
      // maven 'Maven 3'
         jdk 'Java21'
     }
-
+    environment {
+        SONAR_TOKEN = credentials('Token Sonaqube')
+    }
     stages 
     {
         stage('Build and tests')
@@ -35,16 +37,24 @@ pipeline {
 
         stage('Analyse qualité et vulnérabilités')
         {
+
+// mvn -DskipTests verify
+
+// Une tâche exécutant une analyse SonarQube
+// mvn -Dsonar.token=${SONAR_TOKEN} clean integration-test sonar:sonar
+
             parallel
             {
                 stage('Vulnérabilités') {
                     steps {
                         echo 'Tests de Vulnérabilités OWASP'
+                        sh "mvn -DskipTests verify"
                     }
                 }
                  stage('Analyse Sonar') {
                      steps {
                         echo 'Analyse sonar'
+                        sh "mvn -Dsonar.token=${SONAR_TOKEN} clean integration-test sonar:sonar"
                      }
                     
                 }
