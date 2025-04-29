@@ -61,7 +61,6 @@ pipeline {
         }
             
         stage('Déploiement intégration') {
-
             steps {
                 echo "Déploiement intégration"
                 input message: 'Dans quel datacenter voulez-vous deployer votre truc ?', parameters: [choice(choices: ['Paris', 'Lille', 'Lyon'], name: 'Villes')]
