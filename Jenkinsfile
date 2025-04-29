@@ -8,6 +8,7 @@ pipeline {
     environment {
         SONAR_TOKEN = credentials('ad53038b-7bd5-41ef-9056-d84df2962bdb')
     }
+
     stages 
     {
         stage('Build and tests')
@@ -26,6 +27,7 @@ pipeline {
                     {
                         // One or more steps need to be included within each condition's block.
                         archiveArtifacts artifacts: 'application/**/*.jar', followSymlinks: false
+                        stash includes: 'application/**/*.jar', name: 'file'
                     }
                     failure
                     {
@@ -40,15 +42,17 @@ pipeline {
             parallel
             {
                 stage('Vulnérabilités') {
+                    agent any
                     steps {
                         echo 'Tests de Vulnérabilités OWASP'
-                        sh "mvn -DskipTests verify"
+                        sh 'mvn -DskipTests verify'
                     }
                 }
                  stage('Analyse Sonar') {
+                    agent any
                      steps {
                         echo 'Analyse sonar'
-                        sh "mvn -Dsonar.token=${SONAR_TOKEN} clean integration-test sonar:sonar"
+                        sh 'mvn -Dsonar.token=${SONAR_TOKEN} clean integration-test sonar:sonar'
                      }
                     
                 }
@@ -60,7 +64,9 @@ pipeline {
 
             steps {
                 echo "Déploiement intégration"
-                
+                input message: 'Dans quel datacenter voulez-vous deployer votre truc ?', parameters: [choice(choices: ['Paris', 'Lille', 'Lyon'], name: 'Villes')]
+                unstash 'file'
+                sh 'cp $(file) $(Villes)'
             }
         }
 
