@@ -21,7 +21,7 @@ pipeline {
                 echo 'Unit test et packaging'
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
-                            post 
+                post 
                 {
                     always
                     {
@@ -65,25 +65,33 @@ pipeline {
         }
             
         stage('Déploiement intégration') {
-            when {
-            branch 'master'
-            beforeOptions true
-            beforeInput true
-            beforeAgent true
-            }
-            options {
-                timeout(2)
-            }
+            agent none
             input {
-              message 'Dans quel datacenter voulez-vous deployer votre truc ?'
+            message 'Voulez-vous déployer ?'
                 parameters {
-                    choice choices: ['Paris', 'Lille', 'Lyon'], name: 'VILLES'
+                    booleanParam 'Deploi'
                 }
             }
-            steps {
-                echo "Déploiement intégration"
-                unstash 'file'
-                sh 'cp application/**/*.jar /home/plb/mywork/environments/${VILLES}.jar'
+           
+            steps 
+            {
+
+                script 
+                {
+                    def json = readJSON(file: '/home/plb/mywork/multi-module/deployment.json', text: '');
+                    def lstDC = json[dataCenters];
+                    if (Deploi)
+                    { 
+                        node{  
+                            println("Déploiement intégration");
+                            unstash('file');
+                            for (def dc in lstDC)
+                            {
+                                sh 'cp application/**/*.jar /home/plb/mywork/environments/${dc}.jar'
+                            }  
+                        } 
+                    } 
+               } 
             }
         }
 
