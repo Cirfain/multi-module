@@ -87,7 +87,7 @@ pipeline {
                     { 
                         node{
                             git(branch: 'dev', url: '/home/plb/mywork/multi-module');
-                            def json = readJSON(file: '/home/plb/mywork/multi-module/deployment.json', text: '');
+                            def json = readJSON(file: 'deployment.json', text: '');
                             def lstDC = json["dataCenters"];
                             println("Déploiement intégration");
                             unstash('file');
