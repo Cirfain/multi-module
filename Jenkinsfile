@@ -6,7 +6,7 @@ pipeline {
         jdk 'Java21'
     }
     environment {
-        SONAR_TOKEN = credentials('Token Sonaqube')
+        SONAR_TOKEN = credentials("Token Sonaqube")
     }
     stages 
     {
