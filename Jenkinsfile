@@ -70,7 +70,7 @@ pipeline {
             steps {
                 echo "Déploiement intégration"
                 unstash 'file'
-                sh 'cp application/**/*.jar ${VILLES}.jar'
+                sh 'cp application/**/*.jar /home/plb/mywork/environments/${VILLES}.jar'
             }
         }
 
