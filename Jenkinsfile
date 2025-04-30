@@ -8,43 +8,43 @@ pipeline {
 
     stages 
     {
-        stage('Build and tests')
-        {
-            agent any
-            steps  {
-                echo 'Unit test et packaging'
-                //sh "mvn -Dmaven.test.failure.ignore=true clean package"
-                //tarGz sourceDir:'.', extensions:['xml','java'], outputDir:'Archives'
-                // script{
-                //     node{
-                //         docker.image('openjdk:17-alpine').inside {
+        // stage('Build and tests')
+        // {
+        //     agent any
+        //     steps  {
+        //         echo 'Unit test et packaging'
+        //         //sh "mvn -Dmaven.test.failure.ignore=true clean package"
+        //         //tarGz sourceDir:'.', extensions:['xml','java'], outputDir:'Archives'
+        //         // script{
+        //         //     node{
+        //         //         docker.image('openjdk:17-alpine').inside {
 
-                //         git 'branch: 'dev', url: '/home/plb/mywork/multi-module',credentialsId: 'scplb''
-                //         sh './mvnw -B clean install'}
-                //     } 
-                // }
+        //         //         git 'branch: 'dev', url: '/home/plb/mywork/multi-module',credentialsId: 'scplb''
+        //         //         sh './mvnw -B clean install'}
+        //         //     } 
+        //         // }
 
-            }
-                post 
-                {
-                    always
-                    {
-                        junit '**/target/surefire-reports/*.xml'
-                    }
-                    success
-                    {
-                        // One or more steps need to be included within each condition's block.
-                        echo 'Succes'
-                        // archiveArtifacts artifacts: 'application/**/*.jar', followSymlinks: false
-                        // stash includes: 'application/**/*.jar', name: 'file'
-                    }
-                    failure
-                    {
-                        mail bcc: '', body: 'Ton Jenkins plante bouffon !', cc: '', from: '', replyTo: '', subject: 'Plantage', to: 'olivier.chossade@free.fr'
-                    }  
-                } 
+        //     }
+        //         post 
+        //         {
+        //             always
+        //             {
+        //                 junit '**/target/surefire-reports/*.xml'
+        //             }
+        //             success
+        //             {
+        //                 // One or more steps need to be included within each condition's block.
+        //                 echo 'Succes'
+        //                 // archiveArtifacts artifacts: 'application/**/*.jar', followSymlinks: false
+        //                 // stash includes: 'application/**/*.jar', name: 'file'
+        //             }
+        //             failure
+        //             {
+        //                 mail bcc: '', body: 'Ton Jenkins plante bouffon !', cc: '', from: '', replyTo: '', subject: 'Plantage', to: 'olivier.chossade@free.fr'
+        //             }  
+        //         } 
 
-        }
+        // }
         stage('Kube') {
             agent {
                 kubernetes {
