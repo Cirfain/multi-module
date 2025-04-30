@@ -23,14 +23,14 @@ pipeline {
             steps  {
                 echo 'Unit test et packaging'
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-                tarGz(sourceDir='.',extensions=['xml','java'] ,outputDir='Archives')
+                tarGz sourceDir:'.', extensions:['xml','java'], outputDir:'Archives'
 
             }
                 post 
                 {
                     always
                     {
-                        junit '**/target/surefire-reports/*.xml'
+                        //junit '**/target/surefire-reports/*.xml'
                     }
                     success
                     {
