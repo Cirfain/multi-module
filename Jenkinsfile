@@ -22,16 +22,16 @@ pipeline {
             agent any
             steps  {
                 echo 'Unit test et packaging'
-                //sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
                 //tarGz sourceDir:'.', extensions:['xml','java'], outputDir:'Archives'
-                script{
-                    node{
-                        docker.image('openjdk:17-alpine').inside {
+                // script{
+                //     node{
+                //         docker.image('openjdk:17-alpine').inside {
 
-                        git 'branch: 'dev', url: '/home/plb/mywork/multi-module',credentialsId: 'scplb''
-                        sh './mvnw -B clean install'}
-                    } 
-                }
+                //         git 'branch: 'dev', url: '/home/plb/mywork/multi-module',credentialsId: 'scplb''
+                //         sh './mvnw -B clean install'}
+                //     } 
+                // }
 
             }
                 post 
@@ -53,7 +53,17 @@ pipeline {
                 } 
 
         }
-
+        stage('Dockerisation du truc') {
+            agent any
+            steps {
+                unstash 'file'
+                script {
+                    def dockerImage = docker.build('olivierchossade/multi-module','.')
+                    docker.withRegistry ('https://registry.hub.docker.com','OCDocker') {
+                        dockerImage.push 'latest' }
+                } 
+            } 
+        } 
         stage('Analyse qualité et vulnérabilités')
         {
             parallel
