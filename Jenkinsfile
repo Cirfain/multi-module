@@ -52,7 +52,7 @@ pipeline {
                 } 
             }  
             steps {
-                unstash 'file'
+                //unstash 'file'
                 container(name:'openjdk-17')
                 sh './mvnw -Dmaven.test.failure.ignore=true clean package'
            } 
