@@ -27,8 +27,9 @@ pipeline {
                 script{
                     node{
                         docker.image('openjdk:17-alpine').inside {
-                        git 'branch: 'dev', url: '/home/plb/mywork/multi-module''
-                        sh 'mvn -B clean install'}
+
+                        git 'branch: 'dev', url: '/home/plb/mywork/multi-module',credentialsId: 'scplb''
+                        sh './mvnw -B clean install'}
                     } 
                 }
 
