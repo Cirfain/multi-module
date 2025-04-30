@@ -26,7 +26,7 @@ pipeline {
                 //tarGz sourceDir:'.', extensions:['xml','java'], outputDir:'Archives'
                 script{
                     node{
-                        docker..image('openjdk:17-alpine').inside {
+                        docker.image('openjdk:17-alpine').inside {
                         git 'branch: 'dev', url: '/home/plb/mywork/multi-module''
                         sh 'mvn -B clean install'}
                     } 
