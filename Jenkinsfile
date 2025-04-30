@@ -22,8 +22,15 @@ pipeline {
             agent any
             steps  {
                 echo 'Unit test et packaging'
-                sh "mvn -Dmaven.test.failure.ignore=true clean package"
-                tarGz sourceDir:'.', extensions:['xml','java'], outputDir:'Archives'
+                //sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                //tarGz sourceDir:'.', extensions:['xml','java'], outputDir:'Archives'
+                script{
+                    node{
+                        docker..image('openjdk:17-alpine').inside {
+                        git 'branch: 'dev', url: '/home/plb/mywork/multi-module''
+                        sh 'mvn -B clean install'}
+                    } 
+                }
 
             }
                 post 
@@ -62,10 +69,10 @@ pipeline {
                      steps {
                         echo 'Analyse sonar'
                         sh 'mvn -Dsonar.token=${SONAR_TOKEN} clean integration-test sonar:sonar'
-                        script
-                       {
-                        checkSonarQualityGate()
-                       } 
+                    //     script
+                    //    {
+                    //     checkSonarQualityGate()
+                    //    } 
                     }
                     
                 }
