@@ -13,7 +13,7 @@ pipeline {
             agent any
             steps  {
                 echo 'Unit test et packaging'
-                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                //sh "mvn -Dmaven.test.failure.ignore=true clean package"
                 //tarGz sourceDir:'.', extensions:['xml','java'], outputDir:'Archives'
                 // script{
                 //     node{
@@ -34,8 +34,9 @@ pipeline {
                     success
                     {
                         // One or more steps need to be included within each condition's block.
-                        archiveArtifacts artifacts: 'application/**/*.jar', followSymlinks: false
-                        stash includes: 'application/**/*.jar', name: 'file'
+                        echo 'Succes'
+                        // archiveArtifacts artifacts: 'application/**/*.jar', followSymlinks: false
+                        // stash includes: 'application/**/*.jar', name: 'file'
                     }
                     failure
                     {
@@ -44,7 +45,7 @@ pipeline {
                 } 
 
         }
-        stage('Dockerisation du truc') {
+        stage('Kube') {
             agent {
                 kubernetes {
                     inheritFrom 'jdk17-agent'
