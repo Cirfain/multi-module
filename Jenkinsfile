@@ -23,9 +23,8 @@ pipeline {
             steps  {
                 echo 'Unit test et packaging'
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-                script{  
-                    tarGz(sourceDir='.',extensions=['xml','java'] ,outputDir='Archives')
-                } 
+                tarGz(sourceDir='.',extensions=['xml','java'] ,outputDir='Archives')
+
             }
                 post 
                 {
