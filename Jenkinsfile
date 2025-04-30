@@ -1,4 +1,4 @@
-@Library("GlobalLib") _
+@Library('GlobalLib') _
 pipeline {
    agent none 
 
