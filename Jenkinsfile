@@ -2,14 +2,6 @@
 pipeline {
    agent none 
 
-    tools 
-    {
-        maven 'Maven 3'
-        jdk 'Java21'
-    }
-    environment {
-        SONAR_TOKEN = credentials('ad53038b-7bd5-41ef-9056-d84df2962bdb')
-    }
     options {
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')
         timeout(time: 2, unit: 'HOURS')
@@ -54,13 +46,15 @@ pipeline {
 
         }
         stage('Dockerisation du truc') {
-            agent any
+            agent {
+                kubernetes {
+                    inheritFrom 'jdk17-agent'
+                } 
+            }  
             steps {
                 unstash 'file'
-                script {
-                    def dockerImage = docker.build('olivierchossade/multi-module','.')
-                    docker.withRegistry ('https://registry.hub.docker.com','OCDocker') {
-                        dockerImage.push 'latest' }
+                container.name 'openjdk-17'
+                sh './mvnw -Dmaven.test.failure.ignore=true clean package'
                 } 
             } 
         } 
