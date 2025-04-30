@@ -1,3 +1,4 @@
+@Library("GlobalLib") _
 pipeline {
    agent none 
 
@@ -22,6 +23,11 @@ pipeline {
             steps  {
                 echo 'Unit test et packaging'
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                tarGz{
+                    sourceDir:'.'
+                    extensions:['xml','java'] 
+                    outputDir:'Archives'
+                }  
             }
                 post 
                 {
